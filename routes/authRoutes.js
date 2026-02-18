@@ -9,9 +9,7 @@ import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
-/* =====================================================
-   STUDENT REGISTER → SEND OTP
-===================================================== */
+
 router.post("/register", async (req, res) => {
   try {
     let { name, email, rollNo, phone, password } = req.body;
@@ -58,9 +56,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-/* =====================================================
-   VERIFY OTP → CREATE STUDENT
-===================================================== */
+
 router.post("/verify-otp", async (req, res) => {
   try {
     let { name, email, rollNo, phone, password, otp } = req.body;
@@ -83,7 +79,7 @@ router.post("/verify-otp", async (req, res) => {
       rollNo,
       phone,
       password,
-      role: "student",       // ✅ IMPORTANT
+      role: "student",      
       isVerified: true,
     });
 
@@ -99,9 +95,7 @@ router.post("/verify-otp", async (req, res) => {
   }
 });
 
-/* =====================================================
-   LOGIN (STUDENT + ADMIN)
-===================================================== */
+
 router.post("/login", async (req, res) => {
   try {
     const { rollNo, password } = req.body;
@@ -136,13 +130,13 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign(
       {
         id: user._id,
-        role: user.role,     // ✅ embedded in JWT
+        role: user.role,    
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    // 🔥 THIS IS WHAT YOUR FRONTEND NEEDS
+  
     res.json({
       success: true,
       token,
@@ -151,7 +145,7 @@ router.post("/login", async (req, res) => {
         name: user.name,
         email: user.email,
         rollNo: user.rollNo,
-        role: user.role,      // ✅ THIS WAS MISSING BEFORE
+        role: user.role,    
         isVerified: user.isVerified,
       },
     });
@@ -161,9 +155,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-/* =====================================================
-   ADMIN SIGNUP (DOCUMENT VERIFICATION)
-===================================================== */
+
 router.post(
   "/admin/signup",
   upload.single("proofDocument"),
@@ -201,8 +193,8 @@ router.post(
         rollNo,
         phone,
         password,
-        role: "admin",            // ✅ ADMIN
-        isVerified: false,        // ❌ pending approval
+        role: "admin",           
+        isVerified: false,       
         adminVerification: {
           proofDocument: req.file.path,
           clubName,

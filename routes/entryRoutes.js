@@ -6,12 +6,9 @@ import sendEmail from "../utils/sendEmail.js";
 
 const router = express.Router();
 
-/* =========================================================
-   ADMIN QR SCAN — FINAL & CORRECT
-========================================================= */
 router.post("/scan", protect, async (req, res) => {
   try {
-    // Only admins
+ 
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Admin access only" });
     }
@@ -21,7 +18,7 @@ router.post("/scan", protect, async (req, res) => {
       return res.status(400).json({ message: "QR token missing" });
     }
 
-    // Verify QR JWT
+  
     let decoded;
     try {
       decoded = jwt.verify(qrToken, process.env.QR_SECRET_KEY);
